@@ -24,4 +24,4 @@ export const getUserById = (id: string) => {
 export const createUser = (values: Record<string, any>) => new userModel(values).save()
 .then((user) => user.toObject())
 export const deleteUserById = (id: string) => userModel.findOneAndDelete({ _id: id })
-export const updateUserById = (id: string) => userModal.updateUserById({ _id: id })
+export const updateUserById = (id: string) => userModel.findByIdAndUpdate({ _id: id })
