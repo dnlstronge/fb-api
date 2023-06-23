@@ -1,5 +1,5 @@
 import express, { Express, Request, Response, } from 'express';
-import { router } from "./src/Routes/routes"
+import router from './src/router';
 import http from "http"
 import cors from "cors"
 import dotenv from 'dotenv';
@@ -30,3 +30,5 @@ mongoose.connect(mongoURL!)
 mongoose.connection.on("error", (error: Error) => {
     console.log(error)
 })
+
+app.use("/", router())
