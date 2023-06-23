@@ -4,44 +4,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const routes_1 = require("./App/Routes/routes");
+const http_1 = __importDefault(require("http"));
+const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const compression_1 = __importDefault(require("compression"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const body_parser_1 = __importDefault(require("body-parser"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const port = process.env.PORT || 8000;
-const mongoString = process.env.DATABASE_URL;
-mongoose_1.default.connect(mongoString);
-const db = mongoose_1.default.connection;
-db.on('error', (error) => {
+app.use((0, cors_1.default)({ credentials: true }));
+app.use((0, compression_1.default)());
+app.use((0, cookie_parser_1.default)());
+app.use(body_parser_1.default.json());
+const mongoURL = process.env.DATABASE_URL;
+// server
+const server = http_1.default.createServer(app);
+server.listen(8000, () => {
+    console.log(`Listening on http://localhost:8000/`);
+});
+mongoose_1.default.Promise = Promise;
+mongoose_1.default.connect(mongoURL);
+mongoose_1.default.connection.on("error", (error) => {
     console.log(error);
-});
-db.once('connected', () => {
-    console.log('Database Connected');
-});
-/* routes */
-//Post Method
-routes_1.router.post('/post', (req, res) => {
-    res.send('Post API');
-});
-//Get all Method
-routes_1.router.get('/getAll', (req, res) => {
-    res.send('Get All API');
-});
-//Get by ID Method
-routes_1.router.get('/getOne/:id', (req, res) => {
-    res.send('Get by ID API');
-});
-//Update by ID Method
-routes_1.router.patch('/update/:id', (req, res) => {
-    res.send('Update by ID API');
-});
-//Delete by ID Method
-routes_1.router.delete('/delete/:id', (req, res) => {
-    res.send('Delete by ID API');
-});
-app.use("/api");
-// listens
-app.listen(port, () => {
-    console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
