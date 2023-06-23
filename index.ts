@@ -1,14 +1,18 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 8000
+const mongoString = process.env.DATABASE_URL!
+mongoose.connect(mongoString)
 
 // routes
 app.get('/', (req: Request, res: Response) => {
-  res.send('Express + TypeScript Server');
+  
+  res.send('Faux Bank Server - Active');
 });
 
 
