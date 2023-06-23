@@ -32,7 +32,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 password: (0, helpers_1.authentication)(salt, password)
             }
         });
-        return res.sendStatus(200).json(user).end();
+        return res.status(200).json(user).end();
     }
     catch (error) {
         console.log(error);

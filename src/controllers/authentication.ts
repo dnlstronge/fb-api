@@ -8,7 +8,7 @@ export const register = async(req: Request, res: Response) => {
         /* registration process */
         const {email, password, username } = req.body
         if(!email || !password || !username) {
-            return res.sendStatus(400 )
+            return res.sendStatus(400)
         }
         const existingUser = await getUserByEmail(email)
         if(existingUser) {
@@ -23,7 +23,7 @@ export const register = async(req: Request, res: Response) => {
                 password: authentication(salt, password)
             }
         })
-        return res.sendStatus(200).json(user).end()
+        return res.status(200).json(user).end()
     } catch (error) {
         console.log(error)
         return res.sendStatus(400)
