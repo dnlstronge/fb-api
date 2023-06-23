@@ -1,20 +1,20 @@
 import express, { Express, Request, Response } from 'express';
+import { router } from "./App/Routes/routes"
+import cors from "cors"
+
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import compression from 'compression';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
 
 dotenv.config();
+const app = express()
+app.use(cors({credentials: true}))
 
-const app: Express = express();
-const port = process.env.PORT || 8000
-const mongoString = process.env.DATABASE_URL!
-mongoose.connect(mongoString)
-
-// routes
-app.get('/', (req: Request, res: Response) => {
-  
-  res.send('Faux Bank Server - Active');
-});
-
+app.use(compression())
+app.use(cookieParser())
+app.use(bodyParser.json())
 
 
 // listens
