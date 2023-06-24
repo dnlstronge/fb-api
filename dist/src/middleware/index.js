@@ -10,6 +10,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isAuthenticated = void 0;
-const isAuthenticated = () => __awaiter(void 0, void 0, void 0, function* () {
+const users_1 = require("../db/users");
+const isAuthenticated = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const sessionToken = req.cookies("DNSDB-AUTH");
+        if (!sessionToken) {
+            return res.sendStatus(403);
+        }
+        const existingUser = yield (0, users_1.getUserBySessionToken)(sessionToken);
+        if (!existingUser) {
+            return res.sendStatus(400);
+        }
+    }
+    catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
 });
 exports.isAuthenticated = isAuthenticated;
