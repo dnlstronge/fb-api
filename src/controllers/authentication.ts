@@ -2,6 +2,15 @@ import express, {Request, Response} from "express"
 import { createUser, getUserByEmail } from "../db/users"
 import { random, authentication } from "../helpers"
 
+
+export const login = async(req: Request, res: Response) => {
+try {
+    
+} catch (error) {
+    
+}
+}
+
 export const register = async(req: Request, res: Response) => {
     try {
 
