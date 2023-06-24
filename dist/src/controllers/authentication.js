@@ -9,12 +9,41 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.register = void 0;
+exports.register = exports.login = void 0;
 const users_1 = require("../db/users");
 const helpers_1 = require("../helpers");
+/* login controller */
+const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c;
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.sendStatus(400);
+        }
+        const user = yield (0, users_1.getUserByEmail)(email).select("+authentication.salt +authentication.password"); // IMPORTANT
+        if (!user) {
+            return res.sendStatus(400);
+        }
+        const expectedhash = (0, helpers_1.authentication)((_a = user.authentication) === null || _a === void 0 ? void 0 : _a.salt, password);
+        if (((_b = user.authentication) === null || _b === void 0 ? void 0 : _b.password) !== expectedhash) {
+            console.log("forbidden triggered");
+            return res.sendStatus(403);
+        }
+        const salt = (0, helpers_1.random)();
+        user.authentication.sessionToken = (0, helpers_1.authentication)(salt, user._id.toString());
+        yield user.save();
+        res.cookie("DNSFB-AUTH", (_c = user.authentication) === null || _c === void 0 ? void 0 : _c.sessionToken, { domain: "localhost", path: "/" });
+        return res.status(200).json(user).end();
+    }
+    catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
+});
+exports.login = login;
+/* signup controller */
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        /* registration process */
         const { email, password, username } = req.body;
         if (!email || !password || !username) {
             return res.sendStatus(400);

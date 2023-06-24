@@ -9,12 +9,13 @@ try {
     if(!email || !password) {
         return res.sendStatus(400)
     } 
-    const user = await getUserByEmail(email).select(`+authentication.salt +authentication.password`) // IMPORTANT
+    const user = await getUserByEmail(email).select("+authentication.salt +authentication.password") // IMPORTANT
     if(!user) {
         return res.sendStatus(400)
     }
     const expectedhash = authentication (user.authentication?.salt, password)
-    if(user.authentication?.password === expectedhash) {
+    if(user.authentication?.password !== expectedhash) {
+        console.log("forbidden triggered")
         return res.sendStatus(403)
     }
     const salt = random()
