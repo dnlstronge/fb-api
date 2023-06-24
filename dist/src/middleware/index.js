@@ -19,7 +19,7 @@ const isAuthenticated = (req, res) => __awaiter(void 0, void 0, void 0, function
         }
         const existingUser = yield (0, users_1.getUserBySessionToken)(sessionToken);
         if (!existingUser) {
-            return res.sendStatus(400);
+            return res.sendStatus(403);
         }
     }
     catch (error) {
