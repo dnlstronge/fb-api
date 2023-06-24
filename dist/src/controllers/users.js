@@ -9,25 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isAuthenticated = void 0;
-const lodash_1 = require("lodash");
+exports.getAllUsers = void 0;
 const users_1 = require("../db/users");
-const isAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const sessionToken = req.cookies("DNSDB-AUTH");
-        if (!sessionToken) {
-            return res.sendStatus(403);
-        }
-        const existingUser = yield (0, users_1.getUserBySessionToken)(sessionToken);
-        if (!existingUser) {
-            return res.sendStatus(403);
-        }
-        (0, lodash_1.merge)(req, { identity: existingUser });
-        return next();
+        const users = yield (0, users_1.getUsers)();
+        return res.status(200).json(users);
     }
     catch (error) {
         console.log(error);
         return res.sendStatus(400);
     }
 });
-exports.isAuthenticated = isAuthenticated;
+exports.getAllUsers = getAllUsers;
