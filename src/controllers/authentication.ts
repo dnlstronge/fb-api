@@ -2,7 +2,7 @@ import express, {Request, Response} from "express"
 import { createUser, getUserByEmail } from "../db/users"
 import { random, authentication } from "../helpers"
 
-
+/* login controller */
 export const login = async(req: Request, res: Response) => {
 try {
     const {email, password} = req.body
@@ -29,10 +29,12 @@ try {
 }
 }
 
+
+/* signup controller */
 export const register = async(req: Request, res: Response) => {
     try {
 
-        /* registration process */
+       
         const {email, password, username } = req.body
         if(!email || !password || !username) {
             return res.sendStatus(400)
