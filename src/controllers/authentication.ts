@@ -8,9 +8,17 @@ try {
     const {email, password} = req.body
     if(!email || !password) {
         return res.sendStatus(400)
-    } else {
-        
+    } 
+    const user = await getUserByEmail(email)
+    if(!user) {
+        return res.sendStatus(400)
     }
+    const expectedhash = authentication (user.authentication?.salt, password)
+    if(user.authentication?.password !== expectedhash) {
+        return res.sendStatus(403)
+    }
+
+
 } catch (error) {
     console.log(error)
     return res.sendStatus(400);
